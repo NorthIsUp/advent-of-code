@@ -11,12 +11,14 @@ from logging import getLogger
 
 class Problem(Generic[T]):
     newline_delimiter: str = '\n'
+    loaded_input: List[T] = []
 
     def __init__(self) -> None:
         self.argument_parser = ArgumentParser()
         self.add_argument = self.argument_parser.add_argument
         self.add_argument('--input', default='input.txt')
         self.add_argument('--example', nargs='?', dest='input', const='input.example.txt')
+        self.add_argument('--example2', nargs='?', dest='input', const='input.example2.txt')
         self.add_arguments()
         self.args, self.unknown_args = self.argument_parser.parse_known_args()
 
@@ -26,12 +28,19 @@ class Problem(Generic[T]):
         """pass"""
 
     def __iter__(self) -> Generator[T, None, None]:
-        with open(self.root / self.args.input) as input_file:
-            for line in self.split_input(input_file.read()):
-                yield self.transformer(line)
+        yield from self.loaded_input
 
     def split_input(self, input: str) -> Iterable[str]:
         return input.split(self.newline_delimiter)
+
+    def load_input(self) -> List[T]:
+        assert (self.root / self.args.input).exists(), 'input file missing'
+        with open(self.root / self.args.input) as input_file:
+            for line in self.split_input(input_file.read()):
+                to_yield = self.transformer(line)
+                if to_yield is not None:
+                    self.loaded_input.append(to_yield)
+        return self.loaded_input
 
     @property
     def root(self) -> Path:
