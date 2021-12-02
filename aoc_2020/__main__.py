@@ -1,11 +1,10 @@
 import sys
-from pathlib import Path
 from argparse import ArgumentParser
-from subprocess import run
 from inspect import cleandoc
+from pathlib import Path
+from subprocess import run
 
 from .template import problem_template
-
 
 parser = ArgumentParser()
 parser.add_argument("day", type=int)
@@ -26,7 +25,7 @@ if args.start:
         run(
             [
                 'curl',
-                f'https://adventofcode.com/2020/day/{args.day}/input',
+                f'https://adventofcode.com/2021/day/{args.day}/input',
                 '-H', 'Cookie: session=53616c7465645f5f06fd93f57465e98f030c5742f3499920d4dc48df67398e74de34f7ef7c0a7a50c5696b6941a4eaf4',
                 '-o', 'input.txt'
             ],

@@ -34,7 +34,7 @@ class Problem(Generic[T]):
         return input.split(self.newline_delimiter)
 
     def load_input(self) -> List[T]:
-        assert (self.root / self.args.input).exists(), 'input file missing'
+        assert (self.root / self.args.input).exists(), f'input file "{self.args.input}" missing'
         with open(self.root / self.args.input) as input_file:
             for line in self.split_input(input_file.read()):
                 to_yield = self.transformer(line)

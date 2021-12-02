@@ -1,2 +1,2 @@
 #!/usr/bin/env zsh
-python3 -m soc "$@"
+python3 -m aoc_$(date +'%Y') "$@"
